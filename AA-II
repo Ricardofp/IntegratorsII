@@ -1,0 +1,43 @@
+#include<conio.h>
+#include<stdio.h>
+#include<iostream.h>
+#include<string.h>
+
+using namespace std;
+
+void tela(int lini, int coli, int linf, int colf, int cor)
+{
+    window(lini,coli,linf,colf);
+    textbackground(cor);
+    clrscr();
+}
+void moldura()
+{	clrscr();
+	for(int i =0; i<80; i++){
+
+	    gotoxy(i,1);putchar(205);
+	    gotoxy(i,24);putchar(205);
+
+	    }
+
+	    for(i =0; i<24; i++){
+	    gotoxy(1,i);putchar(186);
+	    gotoxy(80,i);putchar(186);
+	    }
+	    gotoxy(1,1);putchar(201);
+	    gotoxy(80,1);putchar(187);
+	    gotoxy(1,24);putchar(200);
+	    gotoxy(80,24);putchar(188);
+	    gotoxy(1,25); putchar(' ');
+}
+
+void mensagem(int col, int lin,std::string mens){
+	gotoxy(col,lin); printf("%s", mens);
+}
+void main()
+{
+	tela(1,1,80,25,2);
+	moldura();
+	mensagem(2,2,"teste");
+	getchar();
+}
