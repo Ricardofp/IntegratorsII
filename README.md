@@ -1,4 +1,0 @@
-IntegratorsII
-=============
-
-Atividade Integradora  II
