@@ -1,9 +1,38 @@
 #include<conio.h>
 #include<stdio.h>
-#include<iostream.h>
 #include<string.h>
+#include<ctype.h>
 
-using namespace std;
+typedef char str15[20];
+typedef str15 m1[10];
+typedef str15 s1[10];
+s1 s,t;
+m1 m,me;
+int op1, op;
+const float inss = 0.075;
+const float valetransp = 0.065;
+const float alimentacao = 0.25;
+
+struct holerite{
+ int codigo;
+ char nome[30];
+ char cargo[20];
+ char cpf[11];
+ char mes[10];
+ char ano[4];
+ int status;
+ float salariob;
+ float salariol;
+ float alim;
+ float valetransporte;
+ float descinss;
+};
+
+holerite func;
+
+void mensagem(int col, int lin,char mens[]){
+	gotoxy(col,lin); printf("%s", mens);
+}
 
 void tela(int lini, int coli, int linf, int colf, int cor)
 {
@@ -11,8 +40,73 @@ void tela(int lini, int coli, int linf, int colf, int cor)
     textbackground(cor);
     clrscr();
 }
+void acend(int c, int l, str15 s)
+{
+	textbackground(3);textcolor(0);gotoxy(c,l);cprintf("%s",s);
+	normvideo();
+
+}
+void apaga(int c, int l,  str15 s)
+{
+  normvideo();gotoxy(c,l);textbackground(1);textcolor(7);cprintf("%s",s);
+}
+
+
+int menuh(int l,int c,int nop, m1  s)
+{ 	int i,op;
+	char p;
+	window(c,l,c+nop+2,l+1);
+	textbackground(7);
+	textcolor(0);
+	clrscr();
+	window(c+1,l+1,c+nop*15,l);
+	textbackground(0);textcolor(7);clrscr();
+	window(1,1,80,25);tela(2,2,10,3,1);window(1,1,80,25);
+	normvideo();
+	gotoxy(c+26,l);puts("SISTEMA DE HOLERITES\n");
+	c=c+2;l=l+2;
+	for (i=1;i<=nop;i++)
+	{
+		gotoxy(c+(i-1)*15,l);cprintf("%s",s[i]);
+	}
+	acend(c,l,s[1]);
+	i=1;gotoxy(c,l);
+
+	do
+	{//in¡cio do do
+	p=getch();
+	if (p==0)
+	{//in¡cio do if
+		p=getch();
+		switch (p)
+		{//in¡cio do switch
+		case 77: apaga(c+(i-1)*15,l,s[i]);
+			 i=i+1;
+			 if (i>nop)
+			  i=1;
+			 acend(c+(i-1)*15,l,s[i]);
+			 break;
+		case 75:apaga(c+(i-1)*15,l,s[i]);;
+			i=i-1;
+			if (i<=0)
+			  i=nop;
+			acend(c+(i-1)*15,l,s[i]);
+			break;
+
+		}  //fim do switch
+	}//fim do if
+		op=i;
+	}  //fim do do
+
+	while (p>13);
+
+	return(op);
+}
+
+
+
 void moldura()
-{	clrscr();
+{
 	for(int i =0; i<80; i++){
 
 	    gotoxy(i,1);putchar(205);
@@ -31,14 +125,395 @@ void moldura()
 	    gotoxy(1,25); putchar(' ');
 }
 
-void mensagem(int col, int lin,std::string mens){
-	gotoxy(col,lin); printf("%s", mens);
+
+void telaInic()
+{  fflush(stdin);
+   textcolor(7);
+   tela(1,1,80,25,1);
+   moldura();
+   gotoxy(14,5);printf("PPPPPPPPPPPPPPPP    MMMMM      MMMMM        AAAAAAAA		");
+   gotoxy(14,6);printf("PPPPPPPPPPPPPPPP    MMMMMM    MMMMMM	   AAAAAAAAAA		");
+   gotoxy(14,7);printf("PPPPP      PPPPP    MMMMMMM  MMMMMMM	  AAAAAAAAAAAA  	");
+   gotoxy(14,8);printf("PPPPP      PPPPP    MMMMMMMMMMMMMMMM	 AAAAA    AAAAA		");
+   gotoxy(14,9);printf("PPPPPPPPPPPPPPPP    MMMMMMMMMMMMMMMM	AAAAAA    AAAAAA	");
+   gotoxy(14,10);printf("PPPPPPPPPPPPPPPP    MMMMM MMMM MMMMM	AAAAAAAAAAAAAAAA	");
+   gotoxy(14,11);printf("PPPPPPPPPPPPPPPP    MMMMM  MM  MMMMM	AAAAAAAAAAAAAAAA	");
+   gotoxy(14,12);printf("PPPPP               MMMMM      MMMMM	AAAAAA    AAAAAA	");
+   gotoxy(14,13);printf("PPPPP               MMMMM      MMMMM	AAAAA      AAAAA	");
+   gotoxy(14,14);printf("PPPPP               MMMMM      MMMMM	AAAAA      AAAAA	");
+   gotoxy(14,15);printf("PPPPP               MMMMM      MMMMM	AAAAA      AAAAA        ");
+   gotoxy(14,17);printf("          Prefeitura Municipal de Alfenas.      ");
+   gotoxy(14,18);printf("                Sistema de Holerites.		  ");
+
 }
+void cadastroholerite(){
+     textcolor(7);
+     tela(1,1,80,25,1);
+     moldura();
+     fflush(stdin);
+	 FILE *arq;
+	 arq= fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+
+	if(arq==NULL){
+     gotoxy(32,23);printf("ARQUIVO INEXISTENTE");getchar();fflush(stdin);
+     arq= fopen("C:\\TC\\BIN\\fun.dat", "wb+");
+	 if (arq==NULL){
+	       gotoxy(35,23);printf("erro");
+
+	}else{
+			gotoxy(27,23);printf("ARQUIVO CRIADO COM SUCESSO");getchar();
+
+		}
+   }else{
+      gotoxy(32,23);printf("ARQUIVO ABERTO");getchar();
+
+    }
+	arq = fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+    fseek(arq,0,SEEK_END);
+    int n=sizeof(struct holerite);
+    int m=(ftell(arq)/n)+1;
+    func.codigo = m;
+
+
+
+     gotoxy(10,23);printf("                                                       ");
+     gotoxy(32,2);printf("CADASTAR HOLERITE");
+     gotoxy(3,3);printf("CODIGO: "); tela(11,3,16,3,6);window(1,1,80,25);gotoxy(11,3);
+     printf("%d",func.codigo);
+     gotoxy(3,4);printf("NOME: ");tela(9,4,38,4,2);window(1,1,80,25);
+     gotoxy(3,6);printf("CPF: ");tela(9,6,19,6,2);window(1,1,80,25);
+     gotoxy(3,8);printf("CARGO: ");tela(9,8,29,8,2);window(1,1,80,25);
+     gotoxy(3,10);printf("MˆS: ");tela(9,10,19,10,2);window(1,1,80,25);
+     gotoxy(22,10);printf("ANO: ");tela(27,10,31,10,2);window(1,1,80,25);
+     gotoxy(3,12);printf("SALARIO BASE:R$");tela(19,12,30,12,2);window(1,1,80,25);
+     gotoxy(3,14);printf("VALE ALIMENTA€AO:R$");tela(23,14,34,14,2);window(1,1,80,25);
+     gotoxy(3,16);printf("VALE TRANSPORTE:R$");tela(23,16,34,16,2);window(1,1,80,25);
+     gotoxy(3,18);printf("DESCONTO INSS:R$");tela(23,18,34,18,2);window(1,1,80,25);
+     gotoxy(3,20);printf("SALARIO LIQUIDO:R$");tela(23,20,34,20,2);window(1,1,80,25);
+     gotoxy(9,4);gets(func.nome);fflush(stdin);
+     gotoxy(9,6);gets(func.cpf);fflush(stdin);
+     gotoxy(9,8);gets(func.cargo);fflush(stdin);
+     gotoxy(9,10);gets(func.mes);fflush(stdin);
+     gotoxy(27,10);gets(func.ano);fflush(stdin);
+     gotoxy(19,12);scanf("%f",&func.salariob);fflush(stdin);
+     func.alim = (func.salariob * alimentacao);
+     func.valetransporte = (func.salariob * valetransp);
+     func.descinss = (func.salariob * inss);
+     func.salariol = (func.salariob - func.descinss +func.alim+func.valetransporte);
+     func.status = 1;
+     gotoxy(23,14);printf("%4.2f",func.alim);fflush(stdin);
+     gotoxy(23,16);printf("%4.2f",func.valetransporte);fflush(stdin);
+     gotoxy(23,18);printf("%4.2f",func.descinss);fflush(stdin);
+     gotoxy(23,20);printf("%4.2f",func.salariol);fflush(stdin);
+
+
+   fseek(arq,0,2);
+   fwrite(&func,sizeof(struct holerite),1,arq);
+   fclose(arq);
+   gotoxy(27,23);printf("REGISTRO SALVO COM SUCESSO!");getchar();fflush(stdin);
+
+
+}
+
+void consultaholerite(){
+
+	int codigohol = 0;
+	holerite func;
+
+	tela(1,1,80,25,1);
+	moldura();
+	FILE *arq;
+	 arq= fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+	if(arq==NULL){
+		gotoxy(32,23);printf("ARQUIVO INEXISTENTE");getchar();fflush(stdin);
+		arq= fopen("C:\\TC\\BIN\\fun.dat", "wb+");
+	if (arq==NULL){
+	       gotoxy(35,23);printf("erro");getchar();fflush(stdin);
+	}else{
+			gotoxy(27,23);printf("ARQUIVO CRIADO COM SUCESSO");getchar();fflush(stdin);
+	     }
+	     }else{
+		gotoxy(32,23);printf("ARQUIVO ABERTO");getchar();fflush(stdin);
+	     }
+	gotoxy(10,23);printf("                                                       ");
+	arq = fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+	gotoxy(32,2);printf("CONSULTAR HOLERITE");
+	gotoxy(25,12); printf("DIGITE O CODIGO DO HOLERITE: ");
+	tela(55,12,58,12,2);gotoxy(60,12);
+	scanf("%d",&codigohol);fflush(stdin);
+	fseek(arq,sizeof(struct holerite)*(codigohol-1),0);
+	fread(&func,sizeof(struct holerite),1,arq);
+
+	if(func.status == 1)
+	{
+	 clrscr();
+	 textcolor(7);
+	 tela(1,1,80,25,1);
+	 moldura();
+	 gotoxy(32,2);printf("CONSULTAR HOLERITE");
+	 gotoxy(3,4);printf("NOME: ");tela(9,4,38,4,2);window(1,1,80,25);
+	 gotoxy(3,6);printf("CPF: ");tela(9,6,19,6,2);window(1,1,80,25);
+	 gotoxy(3,8);printf("CARGO: ");tela(9,8,29,8,2);window(1,1,80,25);
+	 gotoxy(3,10);printf("MESS: ");tela(9,10,19,10,2);window(1,1,80,25);
+	 gotoxy(22,10);printf("ANO: ");tela(27,10,31,10,2);window(1,1,80,25);
+     gotoxy(3,12);printf("SALARIO BASE:R$");tela(19,12,30,12,2);window(1,1,80,25);
+     gotoxy(3,14);printf("VALE ALIMENTA€AO:R$");tela(23,14,34,14,2);window(1,1,80,25);
+     gotoxy(3,16);printf("VALE TRANSPORTE:R$");tela(23,16,34,16,2);window(1,1,80,25);
+     gotoxy(3,18);printf("DESCONTO INSS:R$");tela(23,18,34,18,2);window(1,1,80,25);
+     gotoxy(3,20);printf("SALARIO LIQUIDO:R$");tela(23,20,34,20,2);window(1,1,80,25);
+     gotoxy(9,4);printf(func.nome);fflush(stdin);
+     gotoxy(9,6);printf(func.cpf);fflush(stdin);
+     gotoxy(9,8);printf(func.cargo);fflush(stdin);
+     gotoxy(9,10);printf(func.mes);fflush(stdin);
+     gotoxy(27,10);printf(func.ano);fflush(stdin);
+     gotoxy(19,12);printf("%4.2f",func.salariob);fflush(stdin);
+     gotoxy(23,14);printf("%4.2f",func.alim);fflush(stdin);
+     gotoxy(23,16);printf("%4.2f",func.valetransporte);fflush(stdin);
+     gotoxy(23,18);printf("%4.2f",func.descinss);fflush(stdin);
+     gotoxy(23,20);printf("%4.2f",func.salariol);fflush(stdin);
+     fclose(arq);getchar();
+
+}else{
+window(1,1,80,25);
+gotoxy(30,13);printf("REGISTRO INEXISTENTE!");getchar();fclose(arq);fflush(stdin);
+
+}
+fclose(arq);
+};
+
+void deletaholerite()
+{
+	int codigohol = 0;
+	char ope;
+	holerite func;
+
+	tela(1,1,80,25,1);
+	moldura();
+	FILE *arq;
+	 arq= fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+	if(arq==NULL){
+		gotoxy(32,23);printf("ARQUIVO INEXISTENTE");getchar();fflush(stdin);
+		arq= fopen("C:\\TC\\BIN\\fun.dat", "wb+");
+	if (arq==NULL){
+	       gotoxy(35,23);printf("erro");getchar();fflush(stdin);
+	}else{
+			gotoxy(27,23);printf("ARQUIVO CRIADO COM SUCESSO");getchar();fflush(stdin);
+	     }
+	     }else{
+		gotoxy(32,23);printf("ARQUIVO ABERTO");getchar();fflush(stdin);
+	     }
+	gotoxy(10,23);printf("                                                       ");
+	arq = fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+	gotoxy(32,2);printf("DELETAR HOLERITE");
+	gotoxy(25,12); printf("DIGITE O CODIGO DO HOLERITE: ");
+	tela(55,12,58,12,2);gotoxy(60,12);
+	scanf("%d",&codigohol);fflush(stdin);
+	fseek(arq,sizeof(struct holerite)*(codigohol-1),0);
+	fread(&func,sizeof(struct holerite),1,arq);
+
+    if(func.status == 1)
+	{
+	 clrscr();
+	 textcolor(7);
+	 tela(1,1,80,25,1);
+	 moldura();
+	 gotoxy(32,2);printf("CONSULTAR HOLERITE");
+	 gotoxy(3,4);printf("NOME: ");tela(9,4,38,4,2);window(1,1,80,25);
+	 gotoxy(3,6);printf("CPF: ");tela(9,6,19,6,2);window(1,1,80,25);
+	 gotoxy(3,8);printf("CARGO: ");tela(9,8,29,8,2);window(1,1,80,25);
+	 gotoxy(3,10);printf("MESS: ");tela(9,10,19,10,2);window(1,1,80,25);
+	 gotoxy(22,10);printf("ANO: ");tela(27,10,31,10,2);window(1,1,80,25);
+	 gotoxy(3,12);printf("SALARIO BASE:R$");tela(19,12,30,12,2);window(1,1,80,25);
+	 gotoxy(3,14);printf("VALE ALIMENTA€AO:R$");tela(23,14,34,14,2);window(1,1,80,25);
+	 gotoxy(3,16);printf("VALE TRANSPORTE:R$");tela(23,16,34,16,2);window(1,1,80,25);
+	 gotoxy(3,18);printf("DESCONTO INSS:R$");tela(23,18,34,18,2);window(1,1,80,25);
+	 gotoxy(3,20);printf("SALARIO LIQUIDO:R$");tela(23,20,34,20,2);window(1,1,80,25);
+	 gotoxy(9,4);printf(func.nome);fflush(stdin);
+	 gotoxy(9,6);printf(func.cpf);fflush(stdin);
+	 gotoxy(9,8);printf(func.cargo);fflush(stdin);
+	 gotoxy(9,10);printf(func.mes);fflush(stdin);
+	 gotoxy(27,10);printf(func.ano);fflush(stdin);
+	 gotoxy(19,12);printf("%4.2f",func.salariob);fflush(stdin);
+	 gotoxy(23,14);printf("%4.2f",func.alim);fflush(stdin);
+	 gotoxy(23,16);printf("%4.2f",func.valetransporte);fflush(stdin);
+	 gotoxy(23,18);printf("%4.2f",func.descinss);fflush(stdin);
+	 gotoxy(23,20);printf("%4.2f",func.salariol);fflush(stdin);
+
+	 gotoxy(3,22);printf("DESEJA REALMENTE EXCLUIR O REGISTRO DO HOLERITE? S/N :");
+	 tela(57,22,60,22,2);window(1,1,80,25);
+	 gotoxy(57,22);scanf("%c",&ope);fflush(stdin);
+	 ope = toupper(ope);
+	 if(ope == 'S')
+	 {
+
+		fseek(arq,sizeof(struct holerite)*(codigohol-1),0);
+		func.status = 0;
+		fwrite(&func,sizeof(struct holerite),1,arq);
+		fseek(arq,sizeof(struct holerite)*(codigohol-1),0);
+		fread(&func,sizeof(struct holerite),1,arq);fflush(stdin);
+		fclose(arq);
+		clrscr();tela(1,1,80,25,1); moldura();
+		gotoxy(25,12); printf("REGISTRO DE HOLERITE EXCLUIDO!");getchar();
+	 }else{
+			clrscr();tela(1,1,80,25,1);moldura();fclose(arq);
+			gotoxy(25,12); printf("EXCLUSAO CANCELADA!");getchar();
+		}
+
+	}else{
+	tela(1,1,80,25,1);
+	gotoxy(30,13);printf("REGISTRO INEXISTENTE!");getchar();fclose(arq);fflush(stdin);fclose(arq);
+
+}
+fclose(arq);
+}
+void alteraholerite(){
+
+int codigohol = 0;
+	char ope;
+	holerite func;
+
+	tela(1,1,80,25,1);
+	moldura();
+	FILE *arq;
+	 arq= fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+	if(arq==NULL){
+		gotoxy(32,23);printf("ARQUIVO INEXISTENTE");getchar();fflush(stdin);
+		arq= fopen("C:\\TC\\BIN\\fun.dat", "wb+");
+	if (arq==NULL){
+	       gotoxy(35,23);printf("erro");getchar();fflush(stdin);
+	}else{
+			gotoxy(27,23);printf("ARQUIVO CRIADO COM SUCESSO");getchar();fflush(stdin);
+	     }
+	     }else{
+		gotoxy(32,23);printf("ARQUIVO ABERTO");getchar();fflush(stdin);
+	     }
+	gotoxy(10,23);printf("                                                       ");
+	arq = fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+	gotoxy(32,2);printf("ALTERAR HOLERITE");
+	gotoxy(25,12); printf("DIGITE O CODIGO DO HOLERITE: ");
+	tela(55,12,58,12,2);gotoxy(60,12);
+	scanf("%d",&codigohol);fflush(stdin);
+	fseek(arq,sizeof(struct holerite)*(codigohol-1),0);
+	fread(&func,sizeof(struct holerite),1,arq);
+
+    if(func.status == 1)
+	{
+	 clrscr();
+	 textcolor(7);
+	 tela(1,1,80,25,1);
+	 moldura();
+	 gotoxy(32,2);printf("ALTERAR HOLERITE");
+	 gotoxy(3,4);printf("NOME: ");tela(9,4,38,4,2);window(1,1,80,25);
+	 gotoxy(3,6);printf("CPF: ");tela(9,6,19,6,2);window(1,1,80,25);
+	 gotoxy(3,8);printf("CARGO: ");tela(9,8,29,8,2);window(1,1,80,25);
+	 gotoxy(3,10);printf("MESS: ");tela(9,10,19,10,2);window(1,1,80,25);
+	 gotoxy(22,10);printf("ANO: ");tela(27,10,31,10,2);window(1,1,80,25);
+     gotoxy(3,12);printf("SALARIO BASE:R$");tela(19,12,30,12,2);window(1,1,80,25);
+     gotoxy(3,14);printf("VALE ALIMENTA€AO:R$");tela(23,14,34,14,2);window(1,1,80,25);
+     gotoxy(3,16);printf("VALE TRANSPORTE:R$");tela(23,16,34,16,2);window(1,1,80,25);
+     gotoxy(3,18);printf("DESCONTO INSS:R$");tela(23,18,34,18,2);window(1,1,80,25);
+     gotoxy(3,20);printf("SALARIO LIQUIDO:R$");tela(23,20,34,20,2);window(1,1,80,25);
+     gotoxy(9,4);printf(func.nome);fflush(stdin);
+     gotoxy(9,6);printf(func.cpf);fflush(stdin);
+     gotoxy(9,8);printf(func.cargo);fflush(stdin);
+     gotoxy(9,10);printf(func.mes);fflush(stdin);
+     gotoxy(27,10);printf(func.ano);fflush(stdin);
+     gotoxy(19,12);printf("%4.2f",func.salariob);fflush(stdin);
+     gotoxy(23,14);printf("%4.2f",func.alim);fflush(stdin);
+     gotoxy(23,16);printf("%4.2f",func.valetransporte);fflush(stdin);
+     gotoxy(23,18);printf("%4.2f",func.descinss);fflush(stdin);
+     gotoxy(23,20);printf("%4.2f",func.salariol);fflush(stdin);
+
+	 gotoxy(3,22);printf("DESEJA REALMENTE ALTERAR O REGISTRO DO HOLERITE? S/N :");
+	 tela(57,22,60,22,2);window(1,1,80,25);
+	 gotoxy(57,22);scanf("%c",&ope);fflush(stdin);
+	 ope = toupper(ope);
+	 if(ope == 'S')
+	 {
+		clrscr();tela(1,1,80,25,1);moldura();fflush(stdin);
+	    gotoxy(32,2);printf("ALTERAR HOLERITE");
+	    gotoxy(3,3);printf("CODIGO: "); tela(11,3,16,3,6);window(1,1,80,25);gotoxy(11,3);
+		printf("%d",func.codigo);
+		gotoxy(3,4);printf("NOME: ");tela(9,4,38,4,2);window(1,1,80,25);
+		gotoxy(3,6);printf("CPF: ");tela(9,6,19,6,2);window(1,1,80,25);
+		gotoxy(3,8);printf("CARGO: ");tela(9,8,29,8,2);window(1,1,80,25);
+		gotoxy(3,10);printf("MˆS: ");tela(9,10,19,10,2);window(1,1,80,25);
+		gotoxy(22,10);printf("ANO: ");tela(27,10,31,10,2);window(1,1,80,25);
+		gotoxy(3,12);printf("SALARIO BASE:R$");tela(19,12,30,12,2);window(1,1,80,25);
+		gotoxy(3,14);printf("VALE ALIMENTA€AO:R$");tela(23,14,34,14,2);window(1,1,80,25);
+		gotoxy(3,16);printf("VALE TRANSPORTE:R$");tela(23,16,34,16,2);window(1,1,80,25);
+		gotoxy(3,18);printf("DESCONTO INSS:R$");tela(23,18,34,18,2);window(1,1,80,25);
+		gotoxy(3,20);printf("SALARIO LIQUIDO:R$");tela(23,20,34,20,2);window(1,1,80,25);
+		gotoxy(9,4);gets(func.nome);fflush(stdin);
+		gotoxy(9,6);gets(func.cpf);fflush(stdin);
+		gotoxy(9,8);gets(func.cargo);fflush(stdin);
+		gotoxy(9,10);gets(func.mes);fflush(stdin);
+		gotoxy(27,10);gets(func.ano);fflush(stdin);
+		gotoxy(19,12);scanf("%f",&func.salariob);fflush(stdin);
+		func.alim = (func.salariob * alimentacao);
+		func.valetransporte = (func.salariob * valetransp);
+		func.descinss = (func.salariob * inss);
+		func.salariol = (func.salariob - func.descinss +func.alim+func.valetransporte);
+		func.status= 1;
+		gotoxy(19,12);printf("%4.2f",func.salariob);fflush(stdin);
+		gotoxy(23,14);printf("%4.2f",func.alim);fflush(stdin);
+		gotoxy(23,16);printf("%4.2f",func.valetransporte);fflush(stdin);
+		gotoxy(23,18);printf("%4.2f",func.descinss);fflush(stdin);
+		gotoxy(23,20);printf("%4.2f",func.salariol);fflush(stdin);getchar();
+		fseek(arq,sizeof(struct holerite)*(codigohol-1),0);
+		fwrite(&func,sizeof(struct holerite),1,arq);
+		fclose(arq);
+		clrscr();tela(1,1,80,25,1); moldura();
+		gotoxy(25,12); printf("REGISTRO DE HOLERITE ALTERADO!");getchar();fflush(stdin);
+	 }else{
+			clrscr();tela(1,1,80,25,1);moldura();fclose(arq);
+			gotoxy(25,12); printf("ALTERACAO CANCELADA!");getchar();fflush(stdin);
+		}
+
+	}else{
+	tela(1,1,80,25,1);
+	gotoxy(30,13);printf("REGISTRO INEXISTENTE!");getchar();fclose(arq);fflush(stdin);fclose(arq);
+    }
+	fclose(arq);
+}
+void menuprincipal()
+{
+	strcat(me[1],"<1> Cadastrar");
+	strcat(me[2],"<2> Consultar") ;
+	strcat(me[3],"<3> Alterar");
+	strcat(me[4],"<4> Apagar");
+	strcat(me[5],"<5> Finaliza");
+	do{
+		tela(1,1,80,25,1);
+		textbackground(1);
+		textcolor(7);
+		moldura();
+
+	  op1=menuh(2,2,5,me);
+	  switch (op1)
+	  {
+	       case 1: cadastroholerite();getchar();break;
+
+	       case 2:  consultaholerite();getchar();break;
+
+	       case 3:  alteraholerite();getchar();break;
+
+	       case 4:  deletaholerite();getchar();break;
+
+	       default: break;
+
+	  } //fim do switch
+	}//fim do do
+	while (op1!=5);
+
+}
+
+
 void main()
 {
-	tela(1,1,80,25,2);
-	moldura();
-	mensagem(2,2,"teste");
-	getchar();
+	telaInic();getchar();
+	menuprincipal();
+
+
+
 }
- testando versionamento.
