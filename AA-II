@@ -28,7 +28,7 @@ struct holerite{
  float descinss;
 };
 
-holerite func;
+holerite func,funcaux;
 
 void mensagem(int col, int lin,char mens[]){
 	gotoxy(col,lin); printf("%s", mens);
@@ -59,7 +59,7 @@ int menuh(int l,int c,int nop, m1  s)
 	textbackground(7);
 	textcolor(0);
 	clrscr();
-	window(c+1,l+1,c+nop*15,l);
+	window(c+1,l+1,c+nop*13,l);
 	textbackground(0);textcolor(7);clrscr();
 	window(1,1,80,25);tela(2,2,10,3,1);window(1,1,80,25);
 	normvideo();
@@ -67,7 +67,7 @@ int menuh(int l,int c,int nop, m1  s)
 	c=c+2;l=l+2;
 	for (i=1;i<=nop;i++)
 	{
-		gotoxy(c+(i-1)*15,l);cprintf("%s",s[i]);
+		gotoxy(c+(i-1)*13,l);cprintf("%s",s[i]);
 	}
 	acend(c,l,s[1]);
 	i=1;gotoxy(c,l);
@@ -80,17 +80,17 @@ int menuh(int l,int c,int nop, m1  s)
 		p=getch();
 		switch (p)
 		{//in¡cio do switch
-		case 77: apaga(c+(i-1)*15,l,s[i]);
+		case 77: apaga(c+(i-1)*13,l,s[i]);
 			 i=i+1;
 			 if (i>nop)
 			  i=1;
-			 acend(c+(i-1)*15,l,s[i]);
+			 acend(c+(i-1)*13,l,s[i]);
 			 break;
-		case 75:apaga(c+(i-1)*15,l,s[i]);;
+		case 75:apaga(c+(i-1)*13,l,s[i]);;
 			i=i-1;
 			if (i<=0)
 			  i=nop;
-			acend(c+(i-1)*15,l,s[i]);
+			acend(c+(i-1)*13,l,s[i]);
 			break;
 
 		}  //fim do switch
@@ -408,21 +408,21 @@ int codigohol = 0;
 	 gotoxy(3,8);printf("CARGO: ");tela(9,8,29,8,2);window(1,1,80,25);
 	 gotoxy(3,10);printf("MESS: ");tela(9,10,19,10,2);window(1,1,80,25);
 	 gotoxy(22,10);printf("ANO: ");tela(27,10,31,10,2);window(1,1,80,25);
-     gotoxy(3,12);printf("SALARIO BASE:R$");tela(19,12,30,12,2);window(1,1,80,25);
-     gotoxy(3,14);printf("VALE ALIMENTA€AO:R$");tela(23,14,34,14,2);window(1,1,80,25);
-     gotoxy(3,16);printf("VALE TRANSPORTE:R$");tela(23,16,34,16,2);window(1,1,80,25);
-     gotoxy(3,18);printf("DESCONTO INSS:R$");tela(23,18,34,18,2);window(1,1,80,25);
-     gotoxy(3,20);printf("SALARIO LIQUIDO:R$");tela(23,20,34,20,2);window(1,1,80,25);
-     gotoxy(9,4);printf(func.nome);fflush(stdin);
-     gotoxy(9,6);printf(func.cpf);fflush(stdin);
-     gotoxy(9,8);printf(func.cargo);fflush(stdin);
-     gotoxy(9,10);printf(func.mes);fflush(stdin);
-     gotoxy(27,10);printf(func.ano);fflush(stdin);
-     gotoxy(19,12);printf("%4.2f",func.salariob);fflush(stdin);
-     gotoxy(23,14);printf("%4.2f",func.alim);fflush(stdin);
-     gotoxy(23,16);printf("%4.2f",func.valetransporte);fflush(stdin);
-     gotoxy(23,18);printf("%4.2f",func.descinss);fflush(stdin);
-     gotoxy(23,20);printf("%4.2f",func.salariol);fflush(stdin);
+     	 gotoxy(3,12);printf("SALARIO BASE:R$");tela(19,12,30,12,2);window(1,1,80,25);
+    	 gotoxy(3,14);printf("VALE ALIMENTA€AO:R$");tela(23,14,34,14,2);window(1,1,80,25);
+         gotoxy(3,16);printf("VALE TRANSPORTE:R$");tela(23,16,34,16,2);window(1,1,80,25);
+     	 gotoxy(3,18);printf("DESCONTO INSS:R$");tela(23,18,34,18,2);window(1,1,80,25);
+     	 gotoxy(3,20);printf("SALARIO LIQUIDO:R$");tela(23,20,34,20,2);window(1,1,80,25);
+     	 gotoxy(9,4);printf(func.nome);fflush(stdin);
+     	 gotoxy(9,6);printf(func.cpf);fflush(stdin);
+         gotoxy(9,8);printf(func.cargo);fflush(stdin);
+         gotoxy(9,10);printf(func.mes);fflush(stdin);
+      	 gotoxy(27,10);printf(func.ano);fflush(stdin);
+    	 gotoxy(19,12);printf("%4.2f",func.salariob);fflush(stdin);
+    	 gotoxy(23,14);printf("%4.2f",func.alim);fflush(stdin);
+    	 gotoxy(23,16);printf("%4.2f",func.valetransporte);fflush(stdin);
+    	 gotoxy(23,18);printf("%4.2f",func.descinss);fflush(stdin);
+     	 gotoxy(23,20);printf("%4.2f",func.salariol);fflush(stdin);
 
 	 gotoxy(3,22);printf("DESEJA REALMENTE ALTERAR O REGISTRO DO HOLERITE? S/N :");
 	 tela(57,22,60,22,2);window(1,1,80,25);
@@ -476,20 +476,95 @@ int codigohol = 0;
     }
 	fclose(arq);
 }
+
+void relatorio(){
+	
+    tela(1,1,80,25,1);
+	moldura();
+	FILE *arq;
+	arq= fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+	if(arq==NULL){
+		gotoxy(32,23);printf("ARQUIVO INEXISTENTE");getchar();fflush(stdin);
+		arq= fopen("C:\\TC\\BIN\\fun.dat", "wb+");
+	if (arq==NULL){
+	        gotoxy(35,23);printf("erro");getchar();fflush(stdin);
+	}else{
+			gotoxy(27,23);printf("ARQUIVO CRIADO COM SUCESSO");getchar();fflush(stdin);
+	     }
+	     }else{
+				gotoxy(32,23);printf("ARQUIVO ABERTO");getchar();fflush(stdin);
+			  }
+
+	arq = fopen("C:\\TC\\BIN\\fun.dat", "rb+");
+    fseek(arq,0,SEEK_END);
+    int n=sizeof(struct holerite);
+    int m=(ftell(arq)/n)+1;
+    holerite vetor[20];
+    int qtd = 0;
+	for(int i= 0;i< m; i++){
+
+		fseek(arq,sizeof(struct holerite)*(i),0);
+		fread(&func,sizeof(struct holerite),1,arq);
+		if(func.status == 1){
+		vetor[i] = func;
+		qtd ++;
+		}
+
+	}
+	gotoxy(32,2);printf("RELATORIO HOLERITE");
+	gotoxy(2,3);printf(" COD    NOME                          CPF          MES       ANO     SALARIO");
+
+
+	for(int j=0;j<qtd;j++){
+	for(i=0;i<qtd;i++)
+	{
+	  if((strcmp(vetor[i].nome,vetor[i+1].nome))>0)
+	  {
+		funcaux = vetor[i];
+		vetor[i] = vetor[i+1];
+		vetor[i+1] = funcaux;
+                
+
+	  }
+
+
+
+	}}
+
+
+	for(i=0;i<qtd;i++)
+	{
+	 	 fflush(stdin);
+
+		 gotoxy(3,i+4);printf("%i", vetor[i].codigo);
+		 gotoxy(10,i+4);puts(vetor[i].nome);
+		 gotoxy(40,i+4);puts(vetor[i].cpf);
+		 gotoxy(53,i+4);puts(vetor[i].mes);
+		 gotoxy(63,i+4);puts(vetor[i].ano);
+		 gotoxy(71,i+4);printf("%4.2f",vetor[i].salariol);
+
+	}
+
+
+
+
+}
 void menuprincipal()
 {
-	strcat(me[1],"<1> Cadastrar");
-	strcat(me[2],"<2> Consultar") ;
+	strcat(me[1],"<1> Novo");
+	strcat(me[2],"<2> Busca") ;
 	strcat(me[3],"<3> Alterar");
 	strcat(me[4],"<4> Apagar");
-	strcat(me[5],"<5> Finaliza");
+	strcat(me[5],"<5> Relatorio");
+	strcat(me[6]," <6> Sair");
+
 	do{
 		tela(1,1,80,25,1);
 		textbackground(1);
 		textcolor(7);
 		moldura();
 
-	  op1=menuh(2,2,5,me);
+	  op1=menuh(2,2,6,me);
 	  switch (op1)
 	  {
 	       case 1: cadastroholerite();getchar();break;
@@ -500,20 +575,22 @@ void menuprincipal()
 
 	       case 4:  deletaholerite();getchar();break;
 
+	       case 5: relatorio();getchar();break;
+		   
+		   case 6: break;// relatorio();getchar();break;
+
 	       default: break;
 
 	  } //fim do switch
 	}//fim do do
-	while (op1!=5);
+	while (op1!=6);
 
 }
 
-
 void main()
 {
+
+
 	telaInic();getchar();
 	menuprincipal();
-
-
-
 }
